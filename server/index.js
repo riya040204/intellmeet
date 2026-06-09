@@ -17,6 +17,9 @@ app.use(express.json());
 const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
 
+const meetingRoutes = require("./routes/meetingRoutes");
+app.use("/api/meetings", meetingRoutes);
+
 // Test route
 app.get("/", (req, res) => {
   res.json({ message: "IntellMeet API is running!" });
