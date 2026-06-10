@@ -8,8 +8,9 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import NewMeeting from "./pages/NewMeeting";
+import MeetingRoom from "./pages/MeetingRoom";
 
-// Check if user is logged in
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("token");
   return token ? <>{children}</> : <Navigate to="/login" />;
@@ -30,7 +31,23 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/new-meeting"
+          element={
+            <PrivateRoute>
+              <NewMeeting />
+            </PrivateRoute>
+          }
+        />
         <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route
+          path="/meeting/:id"
+          element={
+            <PrivateRoute>
+              <MeetingRoom />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
