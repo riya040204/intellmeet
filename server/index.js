@@ -29,6 +29,8 @@ const authRoutes = require("./routes/authRoutes");
 const meetingRoutes = require("./routes/meetingRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/meetings", meetingRoutes);
+const aiRoutes = require("./routes/aiRoutes");
+app.use("/api/ai", aiRoutes);
 
 // Test route
 app.get("/", (req, res) => {
