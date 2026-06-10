@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import NewMeeting from "./pages/NewMeeting";
 import MeetingRoom from "./pages/MeetingRoom";
+import MeetingSummary from "./pages/MeetingSummary";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("token");
@@ -28,6 +29,14 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/summary"
+          element={
+            <PrivateRoute>
+              <MeetingSummary />
             </PrivateRoute>
           }
         />

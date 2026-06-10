@@ -99,7 +99,13 @@ export default function Dashboard() {
               + New Meeting
             </button>
             <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium">
-              Join Meeting
+              Join Meeting{" "}
+              <button
+                onClick={() => navigate("/summary")}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium"
+              >
+                🤖 AI Summary
+              </button>
             </button>
           </div>
         </div>
