@@ -86,7 +86,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        <button
+          onClick={() => navigate("/analytics")}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium"
+        >
+          📊 Analytics
+        </button>
         <div className="bg-white rounded-xl shadow p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Quick Actions

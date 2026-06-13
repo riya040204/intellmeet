@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import NewMeeting from "./pages/NewMeeting";
 import MeetingRoom from "./pages/MeetingRoom";
 import MeetingSummary from "./pages/MeetingSummary";
+import Analytics from "./pages/Analytics";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("token");
@@ -37,6 +38,14 @@ function App() {
           element={
             <PrivateRoute>
               <MeetingSummary />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <PrivateRoute>
+              <Analytics />
             </PrivateRoute>
           }
         />
