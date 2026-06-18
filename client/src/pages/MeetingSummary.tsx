@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_URL } from "../config";
 
 interface SummaryData {
   summary: string;
@@ -25,7 +26,7 @@ export default function MeetingSummary() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "/api/ai/summary",
+        `${API_URL}/api/ai/summary`,
         { transcript },
         { headers: { Authorization: `Bearer ${token}` } },
       );

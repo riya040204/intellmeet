@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_URL } from "../config";
 
 interface Meeting {
   _id: string;
@@ -11,6 +12,7 @@ interface Meeting {
   duration: number;
   status: string;
   meetingCode: string;
+  participants: any[];
 }
 
 export default function Dashboard() {
@@ -26,12 +28,13 @@ export default function Dashboard() {
   const fetchMeetings = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("/api/meetings", {
+      const res = await axios.get(`${API_URL}/api/meetings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setMeetings(res.data.meetings);
+      setMeetings(res.data.meetings || []);
     } catch (err) {
       toast.error("Failed to load meetings");
+      setMeetings([]);
     } finally {
       setLoading(false);
     }
@@ -86,31 +89,32 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <button
-          onClick={() => navigate("/analytics")}
-          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium"
-        >
-          📊 Analytics
-        </button>
+        {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Quick Actions
           </h3>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             <button
               onClick={() => navigate("/new-meeting")}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
             >
               + New Meeting
             </button>
+            <button
+              onClick={() => navigate("/summary")}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium"
+            >
+              🤖 AI Summary
+            </button>
+            <button
+              onClick={() => navigate("/analytics")}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium"
+            >
+              📊 Analytics
+            </button>
             <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium">
-              Join Meeting{" "}
-              <button
-                onClick={() => navigate("/summary")}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium"
-              >
-                🤖 AI Summary
-              </button>
+              Join Meeting
             </button>
           </div>
         </div>

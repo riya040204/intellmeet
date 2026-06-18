@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
 
 interface Meeting {
   _id: string;
@@ -23,7 +24,7 @@ export default function Analytics() {
   const fetchMeetings = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("/api/meetings", {
+      const res = await axios.get(`${API_URL}/api/meetings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMeetings(res.data.meetings);

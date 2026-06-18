@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_URL } from "../config";
 
 export default function NewMeeting() {
   const [title, setTitle] = useState("");
@@ -17,7 +18,7 @@ export default function NewMeeting() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "/api/meetings",
+        `${API_URL}/api/meetings`,
         {
           title,
           description,
