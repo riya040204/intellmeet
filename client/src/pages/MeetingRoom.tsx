@@ -56,7 +56,7 @@ export default function MeetingRoom() {
       });
 
       // When new user joins
-      socketRef.current.on("user-joined", ({ socketId }: any) => {
+      socketRef.current.on("user-joined", (_: any) => {
         toast.success("Someone joined the meeting!");
       });
 

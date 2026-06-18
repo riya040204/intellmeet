@@ -17,7 +17,7 @@ export default function NewMeeting() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post(
+      await axios.post(
         `${API_URL}/api/meetings`,
         {
           title,
