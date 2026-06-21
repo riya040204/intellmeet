@@ -165,6 +165,14 @@ export default function MeetingRoom() {
       message: newMessage,
       userName: user.name,
     });
+    setMessages((prev) => [
+      ...prev,
+      {
+        userName: user.name,
+        message: newMessage,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
     setNewMessage("");
   };
 

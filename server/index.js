@@ -18,6 +18,12 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  }),
+);
 
 // Middleware
 app.use(helmet());
