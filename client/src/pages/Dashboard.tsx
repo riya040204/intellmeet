@@ -113,8 +113,11 @@ export default function Dashboard() {
             >
               📊 Analytics
             </button>
-            <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium">
-              Join Meeting
+            <button
+              onClick={() => navigate("/join")}
+              className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium"
+            >
+              🔗 Join Meeting
             </button>
           </div>
         </div>
