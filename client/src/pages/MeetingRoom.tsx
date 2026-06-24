@@ -20,6 +20,9 @@ export default function MeetingRoom() {
   const [newMessage, setNewMessage] = useState("");
   const [showChat, setShowChat] = useState(false);
 
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const screenStreamRef = useRef<MediaStream | null>(null);
+
   const socketRef = useRef<Socket | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const peersRef = useRef<{ [key: string]: RTCPeerConnection }>({});
@@ -100,7 +103,22 @@ export default function MeetingRoom() {
 
   const createPeerConnection = (socketId: string) => {
     const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+      iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" },
+        { urls: "stun:stun2.l.google.com:19302" },
+        { urls: "stun:stun3.l.google.com:19302" },
+        {
+          urls: "turn:numb.viagenie.ca",
+          username: "webrtc@live.com",
+          credential: "muazkh",
+        },
+        {
+          urls: "turn:192.158.29.39:3478?transport=udp",
+          credential: "JZEOEt2V3Qb0y27GRntt2u2PAYA=",
+          username: "28224511:1379330808",
+        },
+      ],
     });
 
     localStreamRef.current?.getTracks().forEach((track) => {
@@ -156,6 +174,56 @@ export default function MeetingRoom() {
       videoTrack.enabled = !videoTrack.enabled;
       setIsVideoOff(!isVideoOff);
     }
+  };
+  const toggleScreenShare = async () => {
+    if (!isScreenSharing) {
+      try {
+        const screenStream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: true,
+        });
+        screenStreamRef.current = screenStream;
+
+        // Replace video track in all peer connections
+        const videoTrack = screenStream.getVideoTracks()[0];
+        Object.values(peersRef.current).forEach((pc) => {
+          const sender = pc.getSenders().find((s) => s.track?.kind === "video");
+          if (sender) sender.replaceTrack(videoTrack);
+        });
+
+        // Show screen in local video
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = screenStream;
+        }
+
+        setIsScreenSharing(true);
+
+        // When user stops sharing from browser UI
+        videoTrack.onended = () => {
+          stopScreenShare();
+        };
+      } catch (err) {
+        toast.error("Could not share screen");
+      }
+    } else {
+      stopScreenShare();
+    }
+  };
+
+  const stopScreenShare = () => {
+    screenStreamRef.current?.getTracks().forEach((t) => t.stop());
+
+    // Restore camera
+    const videoTrack = localStreamRef.current?.getVideoTracks()[0];
+    Object.values(peersRef.current).forEach((pc) => {
+      const sender = pc.getSenders().find((s) => s.track?.kind === "video");
+      if (sender && videoTrack) sender.replaceTrack(videoTrack);
+    });
+
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = localStreamRef.current;
+    }
+    setIsScreenSharing(false);
   };
 
   const sendMessage = () => {
@@ -263,6 +331,16 @@ export default function MeetingRoom() {
           className={`px-6 py-3 rounded-full font-medium ${isVideoOff ? "bg-red-600 text-white" : "bg-gray-600 text-white hover:bg-gray-500"}`}
         >
           {isVideoOff ? "📷 Start Video" : "📹 Stop Video"}
+        </button>
+        <button
+          onClick={toggleScreenShare}
+          className={`px-6 py-3 rounded-full font-medium ${
+            isScreenSharing
+              ? "bg-green-600 text-white"
+              : "bg-gray-600 text-white hover:bg-gray-500"
+          }`}
+        >
+          {isScreenSharing ? "🖥️ Stop Share" : "🖥️ Share Screen"}
         </button>
         <button
           onClick={() => setShowChat(!showChat)}
